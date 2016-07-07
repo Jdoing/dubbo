@@ -5,7 +5,8 @@ import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.extension.Adaptive;
 import com.alibaba.dubbo.common.extension.SPI;
 
-@SPI("zkclient")
+@SPI("curator")
+//@SPI("zkclient")
 public interface ZookeeperTransporter {
 
 	@Adaptive({Constants.CLIENT_KEY, Constants.TRANSPORTER_KEY})
