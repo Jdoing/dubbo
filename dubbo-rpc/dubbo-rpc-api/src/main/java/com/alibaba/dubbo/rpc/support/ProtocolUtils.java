@@ -11,6 +11,12 @@ public class ProtocolUtils {
     private ProtocolUtils() {
     }
 
+    /**
+     * 获取serviceKey:
+     * dubbo://10.1.51.239:20880/com.alibaba.dubbo.demo.DemoService?anyhost=true&application=demo-provider&dubbo=2.0.0&generic=false&interface=com.alibaba.dubbo.demo.DemoService&loadbalance=roundrobin&methods=sayHello&owner=william&pid=92134&side=provider&timestamp=1467087165364
+     * @param url
+     * @return
+     */
     public static String serviceKey(URL url) {
         return serviceKey(url.getPort(), url.getPath(), url.getParameter(Constants.VERSION_KEY),
                           url.getParameter(Constants.GROUP_KEY));

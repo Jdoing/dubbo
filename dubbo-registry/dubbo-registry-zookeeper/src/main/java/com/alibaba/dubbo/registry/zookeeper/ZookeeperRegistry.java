@@ -15,12 +15,6 @@
  */
 package com.alibaba.dubbo.registry.zookeeper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.logger.Logger;
@@ -30,10 +24,16 @@ import com.alibaba.dubbo.common.utils.UrlUtils;
 import com.alibaba.dubbo.registry.NotifyListener;
 import com.alibaba.dubbo.registry.support.FailbackRegistry;
 import com.alibaba.dubbo.remoting.zookeeper.ChildListener;
-import com.alibaba.dubbo.remoting.zookeeper.ZookeeperClient;
 import com.alibaba.dubbo.remoting.zookeeper.StateListener;
+import com.alibaba.dubbo.remoting.zookeeper.ZookeeperClient;
 import com.alibaba.dubbo.remoting.zookeeper.ZookeeperTransporter;
 import com.alibaba.dubbo.rpc.RpcException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * ZookeeperRegistry
@@ -154,7 +154,7 @@ public class ZookeeperRegistry extends FailbackRegistry {
                     }
                     ChildListener zkListener = listeners.get(listener);
                     if (zkListener == null) {
-                        listeners.putIfAbsent(listener, new ChildListener() {
+                        listeners.putIfAbsent(listener, new ChildListener() {//增加实际的监听器
                             public void childChanged(String parentPath, List<String> currentChilds) {
                             	ZookeeperRegistry.this.notify(url, listener, toUrlsWithEmpty(url, parentPath, currentChilds));
                             }

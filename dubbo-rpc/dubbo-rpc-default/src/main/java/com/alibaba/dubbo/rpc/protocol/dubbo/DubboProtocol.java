@@ -15,16 +15,6 @@
  */
 package com.alibaba.dubbo.rpc.protocol.dubbo;
 
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.ReentrantLock;
-
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.Version;
@@ -34,20 +24,16 @@ import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.remoting.Channel;
 import com.alibaba.dubbo.remoting.RemotingException;
 import com.alibaba.dubbo.remoting.Transporter;
-import com.alibaba.dubbo.remoting.exchange.ExchangeChannel;
-import com.alibaba.dubbo.remoting.exchange.ExchangeClient;
-import com.alibaba.dubbo.remoting.exchange.ExchangeHandler;
-import com.alibaba.dubbo.remoting.exchange.ExchangeServer;
-import com.alibaba.dubbo.remoting.exchange.Exchangers;
+import com.alibaba.dubbo.remoting.exchange.*;
 import com.alibaba.dubbo.remoting.exchange.support.ExchangeHandlerAdapter;
-import com.alibaba.dubbo.rpc.Exporter;
-import com.alibaba.dubbo.rpc.Invocation;
-import com.alibaba.dubbo.rpc.Invoker;
-import com.alibaba.dubbo.rpc.Protocol;
-import com.alibaba.dubbo.rpc.RpcContext;
-import com.alibaba.dubbo.rpc.RpcException;
-import com.alibaba.dubbo.rpc.RpcInvocation;
+import com.alibaba.dubbo.rpc.*;
 import com.alibaba.dubbo.rpc.protocol.AbstractProtocol;
+
+import java.net.InetSocketAddress;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * dubbo protocol support.
@@ -65,7 +51,10 @@ public class DubboProtocol extends AbstractProtocol {
     public static final int DEFAULT_PORT = 20880;
     
     public final ReentrantLock lock = new ReentrantLock();
-    
+
+    /**
+     * ip:port映射ExchangeServer
+     */
     private final Map<String, ExchangeServer> serverMap = new ConcurrentHashMap<String, ExchangeServer>(); // <host:port,Exchanger>
     
     private final Map<String, ReferenceCountExchangeClient> referenceClientMap = new ConcurrentHashMap<String, ReferenceCountExchangeClient>(); // <host:port,Exchanger>

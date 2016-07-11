@@ -15,25 +15,18 @@
  */
 package com.alibaba.dubbo.common;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
+import com.alibaba.dubbo.common.utils.NetUtils;
+import com.alibaba.dubbo.common.utils.StringUtils;
+
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.alibaba.dubbo.common.utils.CollectionUtils;
-import com.alibaba.dubbo.common.utils.NetUtils;
-import com.alibaba.dubbo.common.utils.StringUtils;
 
 /**
  * URL - Uniform Resource Locator (Immutable, ThreadSafe)
@@ -339,6 +332,10 @@ public final class URL implements Serializable {
         return address;
     }
 
+    /**
+     * 获取serviceName
+     * @return
+     */
 	public String getPath() {
 		return path;
 	}

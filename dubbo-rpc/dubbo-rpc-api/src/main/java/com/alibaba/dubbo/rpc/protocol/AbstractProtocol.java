@@ -15,11 +15,6 @@
  */
 package com.alibaba.dubbo.rpc.protocol;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.logger.Logger;
@@ -31,6 +26,11 @@ import com.alibaba.dubbo.rpc.Invoker;
 import com.alibaba.dubbo.rpc.Protocol;
 import com.alibaba.dubbo.rpc.support.ProtocolUtils;
 
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * abstract ProtocolSupport.
  * 
@@ -41,6 +41,9 @@ public abstract class AbstractProtocol implements Protocol {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**
+     * [servieKey:Exporter]
+     */
 	protected final Map<String, Exporter<?>> exporterMap = new ConcurrentHashMap<String, Exporter<?>>();
 
 	//TODO SOFEREFENCE

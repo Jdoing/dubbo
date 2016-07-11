@@ -1,13 +1,5 @@
 package com.alibaba.dubbo.remoting.zookeeper.curator;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.zookeeper.CreateMode;
-import org.apache.zookeeper.KeeperException.NoNodeException;
-import org.apache.zookeeper.KeeperException.NodeExistsException;
-import org.apache.zookeeper.WatchedEvent;
-
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.remoting.zookeeper.ChildListener;
 import com.alibaba.dubbo.remoting.zookeeper.StateListener;
@@ -19,6 +11,13 @@ import com.netflix.curator.framework.api.CuratorWatcher;
 import com.netflix.curator.framework.state.ConnectionState;
 import com.netflix.curator.framework.state.ConnectionStateListener;
 import com.netflix.curator.retry.RetryNTimes;
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.KeeperException.NoNodeException;
+import org.apache.zookeeper.KeeperException.NodeExistsException;
+import org.apache.zookeeper.WatchedEvent;
+
+import java.io.IOException;
+import java.util.List;
 
 public class CuratorZookeeperClient extends AbstractZookeeperClient<CuratorWatcher> {
 
@@ -97,7 +96,10 @@ public class CuratorZookeeperClient extends AbstractZookeeperClient<CuratorWatch
 	public void doClose() {
 		client.close();
 	}
-	
+
+	/**
+	 * 将变更事件委托给ChildListener处理
+	 */
 	private class CuratorWatcherImpl implements CuratorWatcher {
 		
 		private volatile ChildListener listener;
@@ -109,7 +111,8 @@ public class CuratorZookeeperClient extends AbstractZookeeperClient<CuratorWatch
 		public void unwatch() {
 			this.listener = null;
 		}
-		
+
+		//变更处理
 		public void process(WatchedEvent event) throws Exception {
 			if (listener != null) {
 				listener.childChanged(event.getPath(), client.getChildren().usingWatcher(this).forPath(event.getPath()));

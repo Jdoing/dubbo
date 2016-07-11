@@ -15,11 +15,6 @@
  */
 package com.alibaba.dubbo.registry.integration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.extension.ExtensionLoader;
@@ -32,14 +27,15 @@ import com.alibaba.dubbo.registry.NotifyListener;
 import com.alibaba.dubbo.registry.Registry;
 import com.alibaba.dubbo.registry.RegistryFactory;
 import com.alibaba.dubbo.registry.RegistryService;
-import com.alibaba.dubbo.rpc.Exporter;
-import com.alibaba.dubbo.rpc.Invoker;
-import com.alibaba.dubbo.rpc.Protocol;
-import com.alibaba.dubbo.rpc.ProxyFactory;
-import com.alibaba.dubbo.rpc.RpcException;
+import com.alibaba.dubbo.rpc.*;
 import com.alibaba.dubbo.rpc.cluster.Cluster;
 import com.alibaba.dubbo.rpc.cluster.Configurator;
 import com.alibaba.dubbo.rpc.protocol.InvokerWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * RegistryProtocol
@@ -201,7 +197,12 @@ public class RegistryProtocol implements Protocol {
         final URL registedProviderUrl = providerUrl.removeParameters(getFilteredKeys(providerUrl)).removeParameter(Constants.MONITOR_KEY);
         return registedProviderUrl;
     }
-    
+
+    /**
+     * 向URL中增加参数category=configurators,表示动态配置
+     * @param registedProviderUrl
+     * @return
+     */
     private URL getSubscribedOverrideUrl(URL registedProviderUrl){
     	return registedProviderUrl.setProtocol(Constants.PROVIDER_PROTOCOL)
                 .addParameters(Constants.CATEGORY_KEY, Constants.CONFIGURATORS_CATEGORY, 
@@ -210,6 +211,7 @@ public class RegistryProtocol implements Protocol {
 
     /**
      * 通过invoker的url 获取 providerUrl的地址
+     * dubbo://192.168.0.104:20880/com.alibaba.dubbo.demo.DemoService?anyhost=true&application=demo-provider&dubbo=2.0.0&generic=false&interface=com.alibaba.dubbo.demo.DemoService&loadbalance=roundrobin&methods=sayHello&owner=william&pid=32154&side=provider&timestamp=1468028038679
      * @param origininvoker
      * @return
      */
@@ -350,7 +352,8 @@ public class RegistryProtocol implements Protocol {
                 }else {
                     originInvoker = invoker;
                 }
-                
+
+                //只有URL不同才重新export
                 URL originUrl = RegistryProtocol.this.getProviderUrl(originInvoker);
                 URL newUrl = getNewInvokerUrl(originUrl, urls);
                 
