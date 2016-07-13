@@ -732,7 +732,11 @@ public class ExtensionLoader<T> {
         com.alibaba.dubbo.common.compiler.Compiler compiler = ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.common.compiler.Compiler.class).getAdaptiveExtension();
         return compiler.compile(code, classLoader);
     }
-    
+
+    /**
+     * 生成适配接口Adaptive的代码
+     * @return
+     */
     private String createAdaptiveExtensionClassCode() {
         StringBuilder codeBuidler = new StringBuilder();
         Method[] methods = type.getMethods();

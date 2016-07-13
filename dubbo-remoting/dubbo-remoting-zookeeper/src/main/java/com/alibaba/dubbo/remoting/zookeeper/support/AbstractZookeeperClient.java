@@ -1,17 +1,17 @@
 package com.alibaba.dubbo.remoting.zookeeper.support;
 
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.remoting.zookeeper.ChildListener;
 import com.alibaba.dubbo.remoting.zookeeper.StateListener;
 import com.alibaba.dubbo.remoting.zookeeper.ZookeeperClient;
+
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public abstract class AbstractZookeeperClient<TargetChildListener> implements ZookeeperClient {
 
@@ -63,11 +63,13 @@ public abstract class AbstractZookeeperClient<TargetChildListener> implements Zo
 			childListeners.putIfAbsent(path, new ConcurrentHashMap<ChildListener, TargetChildListener>());
 			listeners = childListeners.get(path);
 		}
+
 		TargetChildListener targetListener = listeners.get(listener);
 		if (targetListener == null) {
 			listeners.putIfAbsent(listener, createTargetChildListener(path, listener));
 			targetListener = listeners.get(listener);
 		}
+
 		return addTargetChildListener(path, targetListener);
 	}
 

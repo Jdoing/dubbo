@@ -46,7 +46,7 @@ public class HeaderExchangeClient implements ExchangeClient {
 
     private static final Logger logger = LoggerFactory.getLogger( HeaderExchangeClient.class );
 
-    //保持心跳
+    //保持心跳，作为守护线程
     private static final ScheduledThreadPoolExecutor scheduled = new ScheduledThreadPoolExecutor(2, new NamedThreadFactory("dubbo-remoting-client-heartbeat", true));
 
     // 心跳定时器
@@ -164,6 +164,8 @@ public class HeaderExchangeClient implements ExchangeClient {
         if ( heartbeat > 0 ) {
             heatbeatTimer = scheduled.scheduleWithFixedDelay(
                     new HeartBeatTask( new HeartBeatTask.ChannelProvider() {
+
+                        //返回一个不变的并且只包含一个元素的List
                         public Collection<Channel> getChannels() {
                             return Collections.<Channel>singletonList( HeaderExchangeClient.this );
                         }

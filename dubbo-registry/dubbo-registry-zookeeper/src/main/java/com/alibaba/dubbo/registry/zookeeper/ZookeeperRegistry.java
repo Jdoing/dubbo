@@ -52,6 +52,7 @@ public class ZookeeperRegistry extends FailbackRegistry {
     
     private final Set<String> anyServices = new ConcurrentHashSet<String>();
 
+    //一个URL对应多个监听器
     private final ConcurrentMap<URL, ConcurrentMap<NotifyListener, ChildListener>> zkListeners = new ConcurrentHashMap<URL, ConcurrentMap<NotifyListener, ChildListener>>();
     
     private final ZookeeperClient zkClient;
@@ -243,7 +244,13 @@ public class ZookeeperRegistry extends FailbackRegistry {
     private String toUrlPath(URL url) {
         return toCategoryPath(url) + Constants.PATH_SEPARATOR + URL.encode(url.toFullString());
     }
-    
+
+    /**
+     * 将消费方consumer订阅的节点path转换为List<URL>
+     * @param consumer
+     * @param providers
+     * @return
+     */
     private List<URL> toUrlsWithoutEmpty(URL consumer, List<String> providers) {
     	List<URL> urls = new ArrayList<URL>();
         if (providers != null && providers.size() > 0) {
@@ -251,7 +258,7 @@ public class ZookeeperRegistry extends FailbackRegistry {
                 provider = URL.decode(provider);
                 if (provider.contains("://")) {
                     URL url = URL.valueOf(provider);
-                    if (UrlUtils.isMatch(consumer, url)) {
+                    if (UrlUtils.isMatch(consumer, url)) {//只有匹配的才通知
                         urls.add(url);
                     }
                 }

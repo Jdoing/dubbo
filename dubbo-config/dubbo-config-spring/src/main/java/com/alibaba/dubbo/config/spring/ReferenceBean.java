@@ -15,10 +15,10 @@
  */
 package com.alibaba.dubbo.config.spring;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.dubbo.config.*;
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.config.spring.extension.SpringExtensionFactory;
+import com.alibaba.dubbo.config.support.Parameter;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
@@ -26,15 +26,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import com.alibaba.dubbo.config.ApplicationConfig;
-import com.alibaba.dubbo.config.ConsumerConfig;
-import com.alibaba.dubbo.config.ModuleConfig;
-import com.alibaba.dubbo.config.MonitorConfig;
-import com.alibaba.dubbo.config.ReferenceConfig;
-import com.alibaba.dubbo.config.RegistryConfig;
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.alibaba.dubbo.config.spring.extension.SpringExtensionFactory;
-import com.alibaba.dubbo.config.support.Parameter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ReferenceFactoryBean
@@ -60,7 +54,13 @@ public class ReferenceBean<T> extends ReferenceConfig<T> implements FactoryBean,
 		this.applicationContext = applicationContext;
 		SpringExtensionFactory.addApplicationContext(applicationContext);
 	}
-    
+
+
+    /**
+     * 生成reference的代理实例
+     * @return
+     * @throws Exception
+     */
     public Object getObject() throws Exception {
         return get();
     }

@@ -72,6 +72,7 @@ public abstract class AbstractRegistry implements Registry {
 
     private final Set<URL> registered = new ConcurrentHashSet<URL>();
 
+    //保存订阅的URL，重连的时候需要重新订阅
     private final ConcurrentMap<URL, Set<NotifyListener>> subscribed = new ConcurrentHashMap<URL, Set<NotifyListener>>();
 
     //用于保存到文件时用

@@ -15,15 +15,6 @@
  */
 package com.alibaba.dubbo.remoting.exchange.support;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
@@ -34,6 +25,15 @@ import com.alibaba.dubbo.remoting.exchange.Request;
 import com.alibaba.dubbo.remoting.exchange.Response;
 import com.alibaba.dubbo.remoting.exchange.ResponseCallback;
 import com.alibaba.dubbo.remoting.exchange.ResponseFuture;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * DefaultFuture.
@@ -47,6 +47,7 @@ public class DefaultFuture implements ResponseFuture {
 
     private static final Map<Long, Channel>       CHANNELS   = new ConcurrentHashMap<Long, Channel>();
 
+    //(msgId:DefaultFuture) 根据消息id找到对应的DefaultFuture
     private static final Map<Long, DefaultFuture> FUTURES   = new ConcurrentHashMap<Long, DefaultFuture>();
 
     // invoke id.

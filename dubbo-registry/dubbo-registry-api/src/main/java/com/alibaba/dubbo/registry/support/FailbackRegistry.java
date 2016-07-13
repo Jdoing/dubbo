@@ -15,24 +15,14 @@
  */
 package com.alibaba.dubbo.registry.support;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.utils.ConcurrentHashSet;
 import com.alibaba.dubbo.common.utils.NamedThreadFactory;
 import com.alibaba.dubbo.registry.NotifyListener;
+
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * FailbackRegistry. (SPI, Prototype, ThreadSafe)
@@ -183,6 +173,7 @@ public abstract class FailbackRegistry extends AbstractRegistry {
     @Override
     public void subscribe(URL url, NotifyListener listener) {
         super.subscribe(url, listener);
+
         removeFailedSubscribed(url, listener);
         try {
             // 向服务器端发送订阅请求
@@ -247,6 +238,12 @@ public abstract class FailbackRegistry extends AbstractRegistry {
         }
     }
 
+    /**
+     *
+     * @param url 消费者
+     * @param listener
+     * @param urls 提供者
+     */
     @Override
     protected void notify(URL url, NotifyListener listener, List<URL> urls) {
         if (url == null) {
@@ -300,7 +297,10 @@ public abstract class FailbackRegistry extends AbstractRegistry {
         }
     }
 
-    // 重试失败的动作
+    /**
+     * 重试失败的动作
+     * 重新注册，重新订阅等
+     */
     protected void retry() {
         if (! failedRegistered.isEmpty()) {
             Set<URL> failed = new HashSet<URL>(failedRegistered);
