@@ -61,6 +61,7 @@ public class HeaderExchangeClient implements ExchangeClient {
 
     private final ExchangeChannel channel;
 
+    //client是NettyClient
     public HeaderExchangeClient(Client client){
         if (client == null) {
             throw new IllegalArgumentException("client == null");
@@ -76,6 +77,7 @@ public class HeaderExchangeClient implements ExchangeClient {
         startHeatbeatTimer();
     }
 
+    //交给HeaderExchangeChannel处理
     public ResponseFuture request(Object request) throws RemotingException {
         return channel.request(request);
     }

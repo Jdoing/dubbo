@@ -15,21 +15,16 @@
  */
 package com.alibaba.dubbo.remoting.transport.netty;
 
-import java.net.InetSocketAddress;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.jboss.netty.channel.ChannelHandler.Sharable;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelHandler;
-
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.utils.NetUtils;
 import com.alibaba.dubbo.remoting.Channel;
 import com.alibaba.dubbo.remoting.ChannelHandler;
+import org.jboss.netty.channel.ChannelHandler.Sharable;
+import org.jboss.netty.channel.*;
+
+import java.net.InetSocketAddress;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * NettyHandler
@@ -42,7 +37,10 @@ public class NettyHandler extends SimpleChannelHandler {
     private final Map<String, Channel> channels = new ConcurrentHashMap<String, Channel>(); // <ip:port, channel>
     
     private final URL url;
-    
+
+    /**
+     * 这里的handler为NettyClient
+     */
     private final ChannelHandler handler;
     
     public NettyHandler(URL url, ChannelHandler handler){
@@ -99,6 +97,7 @@ public class NettyHandler extends SimpleChannelHandler {
         super.writeRequested(ctx, e);
         NettyChannel channel = NettyChannel.getOrAddChannel(ctx.getChannel(), url, handler);
         try {
+            //这里的handler为NettyClient，
             handler.sent(channel, e.getMessage());
         } finally {
             NettyChannel.removeChannelIfDisconnected(ctx.getChannel());

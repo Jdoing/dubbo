@@ -109,6 +109,14 @@ public abstract class AbstractPeer implements Endpoint, ChannelHandler {
         handler.disconnected(ch);
     }
 
+    /**
+     * 这里是sent方法，不是send方法
+     *
+     * 委托handler发送数据，这里的handler是new DecodeHandler(new HeaderExchangeHandler(handler))
+     * @param ch
+     * @param msg
+     * @throws RemotingException
+     */
     public void sent(Channel ch, Object msg) throws RemotingException {
         if (closed) {
             return;

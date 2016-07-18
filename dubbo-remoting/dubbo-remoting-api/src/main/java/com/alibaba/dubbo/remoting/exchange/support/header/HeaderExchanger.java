@@ -35,8 +35,10 @@ public class HeaderExchanger implements Exchanger {
 
     /**
      * 这里使用包装模式，对ExchangeHandler进行包装。
+     *
+     * HeaderExchangeClient( Client [DecodeHandler (handler)] )
      * @param url
-     * @param handler
+     * @param handler 一般是requestHandler
      * @return
      * @throws RemotingException
      */

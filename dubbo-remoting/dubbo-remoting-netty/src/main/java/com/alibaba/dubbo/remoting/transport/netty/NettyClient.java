@@ -15,18 +15,6 @@
  */
 package com.alibaba.dubbo.remoting.transport.netty;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
-
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.Version;
@@ -37,6 +25,12 @@ import com.alibaba.dubbo.common.utils.NetUtils;
 import com.alibaba.dubbo.remoting.ChannelHandler;
 import com.alibaba.dubbo.remoting.RemotingException;
 import com.alibaba.dubbo.remoting.transport.AbstractClient;
+import org.jboss.netty.bootstrap.ClientBootstrap;
+import org.jboss.netty.channel.*;
+import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * NettyClient.
@@ -56,7 +50,15 @@ public class NettyClient extends AbstractClient {
     private ClientBootstrap bootstrap;
 
     private volatile Channel channel; // volatile, please copy reference to use
-    
+
+
+    /**
+     * handler为new DecodeHandler(new HeaderExchangeHandler(handler)),包装的handler为DubboProtocol内部类requestHandler
+     *
+     * @param url
+     * @param handler new DecodeHandler(new HeaderExchangeHandler(handler))
+     * @throws RemotingException
+     */
     public NettyClient(final URL url, final ChannelHandler handler) throws RemotingException{
         super(url, wrapChannelHandler(url, handler));
     }
